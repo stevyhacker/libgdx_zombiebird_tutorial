@@ -7,9 +7,9 @@ import me.montecode.game.libgdx.zombiebird.ZombieBirdGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Zombie Bird";
-        config.width = 480;
-        config.height = 320;
+        config.title = "Zombie Rectangle";
+        config.width = 272;
+        config.height = 408;
         new LwjglApplication(new ZombieBirdGame(), config);
 	}
 }

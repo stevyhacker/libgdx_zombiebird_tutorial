@@ -2,21 +2,31 @@ package me.montecode.game.libgdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+
+import me.montecode.game.libgdx.gameworld.GameRenderer;
+import me.montecode.game.libgdx.gameworld.GameWorld;
 
 /**
  * Created by stevyhacker on 26.9.14..
  */
 public class GameScreen implements Screen {
+    private GameWorld world;
+    private GameRenderer renderer;
 
     public GameScreen() {
+        world = new GameWorld();
+        renderer = new GameRenderer(world);
         Gdx.app.log("GameScreen", "Attached");
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(10 / 255.0f, 15 / 255.0f, 230 / 255.0f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        world.update(delta);
+        renderer.render();
+
+        // Covert Frame rate to String, print it
+        // Gdx.app.log("GameScreen FPS", (1/delta) + "");
     }
 
     @Override
