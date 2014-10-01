@@ -1,9 +1,12 @@
 package me.montecode.game.libgdx.gameworld;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.montecode.game.libgdx.gameobjects.Bird;
@@ -21,6 +24,14 @@ public class GameRenderer {
 
     private int midPointY;
     private int gameHeight;
+    private Bird bird;
+    private TextureRegion background;
+    private TextureRegion grass;
+    private Animation birdAnimation;
+    private TextureRegion birdMid;
+    private TextureRegion birdDown;
+    private TextureRegion birdUp;
+    private TextureRegion skullUp, skullDown, bar;
 
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
 
@@ -38,9 +49,28 @@ public class GameRenderer {
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
+        initGameObjects();
+        initAssets();
 
     }
 
+    private void initGameObjects() {
+        bird = gameWorld.getBird();
+    }
+
+    private void initAssets() {
+        background = AssetLoader.background;
+        grass = AssetLoader.grass;
+        birdAnimation = AssetLoader.birdAnimation;
+        birdMid = AssetLoader.bird;
+        birdDown = AssetLoader.birdDown;
+        birdUp = AssetLoader.birdUp;
+        skullUp = AssetLoader.skullUp;
+        skullDown = AssetLoader.skullDown;
+        bar = AssetLoader.bar;
+    }
+    
+    
     public void render(float runTime) {
 
         Bird bird = gameWorld.getBird();
@@ -80,8 +110,17 @@ public class GameRenderer {
         // Draw bird at its coordinates. Retrieve the Animation object from
         // AssetLoader
         // Pass in the runTime variable to get the current frame.
-        batcher.draw(AssetLoader.birdAnimation.getKeyFrame(runTime),
-                bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
+        if (bird.shouldntFlap()) {
+            batcher.draw(birdMid, bird.getX(), bird.getY(),
+                    bird.getWidth() / 2.0f, bird.getHeight() / 2.0f,
+                    bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
+
+        } else {
+            batcher.draw(birdAnimation.getKeyFrame(runTime), bird.getX(),
+                    bird.getY(), bird.getWidth() / 2.0f,
+                    bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(),
+                    1, 1, bird.getRotation());
+        }
 
         // End SpriteBatch
         batcher.end();
