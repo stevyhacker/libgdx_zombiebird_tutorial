@@ -3,6 +3,7 @@ package me.montecode.game.libgdx.gameworld;
 import com.badlogic.gdx.math.Rectangle;
 
 import me.montecode.game.libgdx.gameobjects.Bird;
+import me.montecode.game.libgdx.gameobjects.ScrollHandler;
 
 /**
  * Created by stevyhacker on 29.9.14..
@@ -10,16 +11,19 @@ import me.montecode.game.libgdx.gameobjects.Bird;
 public class GameWorld {
     private Rectangle rect = new Rectangle(0, 0, 17, 12);
     private Bird bird;
+    private ScrollHandler scroller;
 
 
     public GameWorld(int midPointY){
         bird = new Bird(33, midPointY - 5, 17, 12);
-
+        // The grass should start 66 pixels below the midPointY
+        scroller = new ScrollHandler(midPointY + 66);
     }
 
     public void update(float delta) {
 
         bird.update(delta);
+        scroller.update(delta);
 
 //        Rectangle code
 //        rect.x++;
@@ -41,5 +45,9 @@ public class GameWorld {
 
     public Bird getBird(){
         return bird;
+    }
+
+    public ScrollHandler getScroller() {
+        return scroller;
     }
 }
