@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import me.montecode.game.libgdx.gameobjects.Bird;
 import me.montecode.game.libgdx.gameobjects.ScrollHandler;
+import me.montecode.game.libgdx.helpers.AssetLoader;
 
 /**
  * Created by stevyhacker on 29.9.14..
@@ -12,6 +13,7 @@ public class GameWorld {
     private Rectangle rect = new Rectangle(0, 0, 17, 12);
     private Bird bird;
     private ScrollHandler scroller;
+    private boolean isAlive = true;
 
 
     public GameWorld(int midPointY){
@@ -25,9 +27,11 @@ public class GameWorld {
         bird.update(delta);
         scroller.update(delta);
 
-        if (scroller.collides(bird)) {
+        if (isAlive &&  scroller.collides(bird)) {
             // Clean up on game over
             scroller.stop();
+            AssetLoader.dead.play();
+            isAlive = false;
         }
 
 

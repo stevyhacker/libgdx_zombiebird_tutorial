@@ -1,6 +1,7 @@
 package me.montecode.game.libgdx.helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,6 +16,8 @@ public class AssetLoader {
 
     public static Animation birdAnimation;
     public static TextureRegion bird, birdDown,birdUp;
+
+    public static Sound dead;
 
     public static TextureRegion skullUp, skullDown, bar;
 
@@ -49,6 +52,9 @@ public class AssetLoader {
 
         bar = new TextureRegion(texture, 136, 16, 22, 3);
         bar.flip(false, true);
+
+        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
+
 
     }
 
