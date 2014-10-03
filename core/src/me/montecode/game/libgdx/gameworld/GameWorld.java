@@ -25,6 +25,12 @@ public class GameWorld {
         bird.update(delta);
         scroller.update(delta);
 
+        if (scroller.collides(bird)) {
+            // Clean up on game over
+            scroller.stop();
+        }
+
+
 //        Rectangle code
 //        rect.x++;
 //        if (rect.x > 137) {
