@@ -1,5 +1,6 @@
 package me.montecode.game.libgdx.gameworld;
 
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
 import me.montecode.game.libgdx.gameobjects.Bird;
@@ -13,13 +14,16 @@ public class GameWorld {
     private Rectangle rect = new Rectangle(0, 0, 17, 12);
     private Bird bird;
     private ScrollHandler scroller;
-    private boolean isAlive = true;
+    private Rectangle ground;
+    private int score = 0;
 
 
-    public GameWorld(int midPointY){
+    public GameWorld(int midPointY) {
         bird = new Bird(33, midPointY - 5, 17, 12);
         // The grass should start 66 pixels below the midPointY
-        scroller = new ScrollHandler(midPointY + 66);
+        scroller = new ScrollHandler(this, midPointY + 66);
+        ground = new Rectangle(0, midPointY + 66, 136, 11);
+
     }
 
     public void update(float delta) {
@@ -27,13 +31,17 @@ public class GameWorld {
         bird.update(delta);
         scroller.update(delta);
 
-        if (isAlive &&  scroller.collides(bird)) {
-            // Clean up on game over
+        if (scroller.collides(bird) && bird.isAlive()) {
             scroller.stop();
+            bird.die();
             AssetLoader.dead.play();
-            isAlive = false;
         }
 
+        if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
+            scroller.stop();
+            bird.die();
+            bird.decelerate();
+        }
 
 //        Rectangle code
 //        rect.x++;
@@ -53,11 +61,20 @@ public class GameWorld {
         return rect;
     }
 
-    public Bird getBird(){
+    public Bird getBird() {
         return bird;
     }
 
     public ScrollHandler getScroller() {
         return scroller;
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int increment) {
+        score += increment;
+    }
+
 }

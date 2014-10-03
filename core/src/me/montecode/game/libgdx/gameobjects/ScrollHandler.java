@@ -1,13 +1,18 @@
 package me.montecode.game.libgdx.gameobjects;
 
+import me.montecode.game.libgdx.gameworld.GameWorld;
+import me.montecode.game.libgdx.helpers.AssetLoader;
+
 /**
  * Created by stevyhacker on 1.10.14..
  */
 public class ScrollHandler {
 
+    private GameWorld gameWorld;
     // ScrollHandler will create all five objects that we need.
     private Grass frontGrass, backGrass;
     private Pipe pipe1, pipe2, pipe3;
+
 
     // ScrollHandler will use the constants below to determine
     // how fast we need to scroll and also determine
@@ -19,16 +24,17 @@ public class ScrollHandler {
 
     // Constructor receives a float that tells us where we need to create our
     // Grass and Pipe objects.
-    public ScrollHandler(float yPos) {
-
+    public ScrollHandler(GameWorld gameWorld, float yPos) {
+        this.gameWorld = gameWorld;
         frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
         backGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11,
                 SCROLL_SPEED);
 
-        pipe1 = new Pipe(210, 0, 22, 60, SCROLL_SPEED,yPos);
-        pipe2 = new Pipe(pipe1.getTailX() + PIPE_GAP, 0, 22, 70, SCROLL_SPEED,yPos);
-        pipe3 = new Pipe(pipe2.getTailX() + PIPE_GAP, 0, 22, 60, SCROLL_SPEED,yPos);
-
+        pipe1 = new Pipe(210, 0, 22, 60, SCROLL_SPEED, yPos);
+        pipe2 = new Pipe(pipe1.getTailX() + PIPE_GAP, 0, 22, 70, SCROLL_SPEED,
+                yPos);
+        pipe3 = new Pipe(pipe2.getTailX() + PIPE_GAP, 0, 22, 60, SCROLL_SPEED,
+                yPos);
     }
 
     public void update(float delta) {
@@ -68,7 +74,31 @@ public class ScrollHandler {
 
     // Return true if ANY pipe hits the bird.
     public boolean collides(Bird bird) {
-        return (pipe1.collides(bird) || pipe2.collides(bird) || pipe3.collides(bird));
+
+        if (!pipe1.isScored()
+                && pipe1.getX() + (pipe1.getWidth() / 2) < bird.getX()
+                + bird.getWidth()) {
+            addScore(1);
+            pipe1.setScored(true);
+            AssetLoader.coin.play();
+        } else if (!pipe2.isScored()
+                && pipe2.getX() + (pipe2.getWidth() / 2) < bird.getX()
+                + bird.getWidth()) {
+            addScore(1);
+            pipe2.setScored(true);
+            AssetLoader.coin.play();
+
+        } else if (!pipe3.isScored()
+                && pipe3.getX() + (pipe3.getWidth() / 2) < bird.getX()
+                + bird.getWidth()) {
+            addScore(1);
+            pipe3.setScored(true);
+            AssetLoader.coin.play();
+
+        }
+
+        return (pipe1.collides(bird) || pipe2.collides(bird) || pipe3
+                .collides(bird));
     }
     // The getters for our five instance variables
     public Grass getFrontGrass() {
@@ -89,6 +119,10 @@ public class ScrollHandler {
 
     public Pipe getPipe3() {
         return pipe3;
+    }
+
+    private void addScore(int increment) {
+        gameWorld.addScore(increment);
     }
 
 }
