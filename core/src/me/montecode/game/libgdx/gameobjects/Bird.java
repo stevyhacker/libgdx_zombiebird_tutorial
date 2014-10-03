@@ -50,6 +50,12 @@ public class Bird {
             velocity.y = 200;
         }
 
+        // CEILING CHECK
+        if (position.y < -23) {
+            position.y = -23;
+            velocity.y = 0;
+        }
+
         position.add(velocity.cpy().scl(delta));
 
         boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
@@ -79,6 +85,15 @@ public class Bird {
         velocity.y = 0;
     }
 
+    public void onRestart(int y) {
+        rotation = 0;
+        position.y = y;
+        velocity.x = 0;
+        velocity.y = 0;
+        acceleration.x = 0;
+        acceleration.y = 460;
+        isAlive = true;
+    }
 
     public void decelerate() {
         // We want the bird to stop accelerating downwards once it is dead.

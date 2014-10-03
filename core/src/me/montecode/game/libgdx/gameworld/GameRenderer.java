@@ -69,7 +69,7 @@ public class GameRenderer {
         pipe2 = scroller.getPipe2();
         pipe3 = scroller.getPipe3();
 
-}
+    }
 
     private void initAssets() {
         background = AssetLoader.background;
@@ -82,8 +82,8 @@ public class GameRenderer {
         skullDown = AssetLoader.skullDown;
         bar = AssetLoader.bar;
     }
-    
-    
+
+
     public void render(float runTime) {
 
         Bird bird = gameWorld.getBird();
@@ -139,7 +139,27 @@ public class GameRenderer {
                     bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(),
                     1, 1, bird.getRotation());
         }
-        String score = gameWorld.getScore() + "";
+
+        // TEMPORARY CODE! We will fix this section later:
+
+        if (gameWorld.isReady()) {
+            // Draw shadow first
+            AssetLoader.shadow.draw(batcher, "Touch me", (136 / 2)
+                    - (42), 76);
+            // Draw text
+            AssetLoader.font.draw(batcher, "Touch me", (136 / 2)
+                    - (42 - 1), 75);
+        } else {
+
+            if (gameWorld.isGameOver()) {
+                AssetLoader.shadow.draw(batcher, "Game Over", 25, 56);
+                AssetLoader.font.draw(batcher, "Game Over", 24, 55);
+
+                AssetLoader.shadow.draw(batcher, "Try again?", 23, 76);
+                AssetLoader.font.draw(batcher, "Try again?", 24, 75);
+            }
+        }
+            String score = gameWorld.getScore() + "";
 
 // Draw shadow first
         AssetLoader.shadow.draw(batcher, "" + gameWorld.getScore(), (136 / 2) - (3 * score.length()), 12);
